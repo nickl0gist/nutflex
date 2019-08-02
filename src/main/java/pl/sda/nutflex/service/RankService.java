@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RankService {
 
-    void rankMovie(Customer customer, Movie movie, Rent rent, Double score, String opinion);
+    void rankMovie(Movie movie, Rent rent, Double score, String opinion);
 
     List<Ranks> getRanksByMovie(Movie movie);
 

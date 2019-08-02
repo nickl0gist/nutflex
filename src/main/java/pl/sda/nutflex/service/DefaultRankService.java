@@ -14,7 +14,7 @@ import java.util.List;
 public class DefaultRankService implements RankService {
 
     @Override
-    public void rankMovie(Customer customer, Movie movie, Rent rent, Double score, String opinion) {
+    public void rankMovie(Movie movie, Rent rent, Double score, String opinion) {
 
 
             Ranks rank = new Ranks();
