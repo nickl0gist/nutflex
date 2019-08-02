@@ -69,7 +69,7 @@ public class DefaultRentServiceTest {
         customer.setFullName("PW");
         customer.setPhone("+48 777 77 77");
 
-        try(Session session = SessionUtil.getSession()) {
+        try (Session session = SessionUtil.getSession()) {
             Transaction tx = session.beginTransaction();
             session.persist(copy1);
             session.persist(copy2);
@@ -82,20 +82,20 @@ public class DefaultRentServiceTest {
     }
 
     @Test(dependsOnMethods = {"rent_Movie_test"})
-    void get_List_of_available_copies(){
+    void get_List_of_available_copies() {
         List<Copy> copies = defaultRentService.getAvailableCopies();
         assertFalse(copies.isEmpty());
-        assertEquals(copies.size() , 3);
+        assertEquals(copies.size(), 3);
     }
 
     @Test
-    void rent_Movie_test(){
+    void rent_Movie_test() {
 
         List<Rent> rents;
         defaultRentService.rentMovie(customer, copy1);
         defaultRentService.rentMovie(customer, copy5);
 
-        try(Session session = SessionUtil.getSession()) {
+        try (Session session = SessionUtil.getSession()) {
             Query<Rent> query = session.createQuery("from Rent r where r.status =:status", Rent.class);
             query.setParameter("status", RentStatus.IN_RENT);
             rents = query.list();
@@ -104,7 +104,7 @@ public class DefaultRentServiceTest {
     }
 
     @Test
-    void return_Movie_test(){
+    void return_Movie_test() {
         Copy testCopy;
         Rent rent = new Rent();
         Long rentDays = 5L;
@@ -123,7 +123,7 @@ public class DefaultRentServiceTest {
         }
         defaultRentService.returnMovie(customer, copy3);
 
-        try(Session session = SessionUtil.getSession()) {
+        try (Session session = SessionUtil.getSession()) {
             List<?> list;
 
             Query<Object[]> query2 = session.createQuery("from Rent r left join r.copy where r.status =:status and r.copy.copyId=:copy");
@@ -132,14 +132,14 @@ public class DefaultRentServiceTest {
             list = query2.list();
             Object[] row = (Object[]) list.get(0);
             rent = (Rent) row[0];
-            testCopy = (Copy)row[1];
+            testCopy = (Copy) row[1];
         }
         assertFalse(testCopy.isRented());
         assertTrue(rent.getTotal().stripTrailingZeros().equals(BigDecimal.valueOf(12.5)));
     }
 
     @Test(dependsOnMethods = {"rent_Movie_test", "return_Movie_test"})
-    void get_Rents_By_Customer_test (){
+    void get_Rents_By_Customer_test() {
         List<Rent> rents;
         rents = defaultRentService.getRentsByCustomer(customer);
         rents.stream().forEach(System.out::println);
@@ -148,7 +148,7 @@ public class DefaultRentServiceTest {
     }
 
     @Test(dependsOnMethods = {"get_Rents_By_Customer_test"})
-    void get_Not_Yet_Rated_Movies_test(){
+    void get_Not_Yet_Rated_Movies_test() {
         Map<Movie, Rent> map;
         map = defaultRentService.getNotYetRatedMovies(customer);
         map.entrySet().forEach(System.out::println);

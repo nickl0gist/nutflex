@@ -14,7 +14,7 @@ public class Ranks {
     Long rankId;
 
     @Column
-    @Size(min = 100, max = 1000)
+    @Size(min = 0, max = 1000)
     String opinion;
 
     @Column(columnDefinition = "double default 0.0")
@@ -23,6 +23,7 @@ public class Ranks {
     double score;
 
     @OneToOne(mappedBy = "ranks")
+
     Rent rent;
 
     public Long getRankId() {
